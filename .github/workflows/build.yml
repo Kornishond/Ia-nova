@@ -27,7 +27,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          SDKMANAGER="${ANDROID_HOME:-/usr/local/lib/android/sdk}/cmdline-tools/latest/bin/sdkmanager"
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
           if [[ ! -x "$SDKMANAGER" ]]; then
             SDKMANAGER="$(command -v sdkmanager)"
           fi
@@ -40,6 +40,13 @@ jobs:
           set -euo pipefail
           unzip -oq Echo-Nova-0.1.0-projet-complet.zip
           chmod +x Echo-Nova/gradlew Echo-Nova/scripts/*.sh
+
+      - name: Fix Java compilation
+        shell: bash
+        run: |
+          set -euo pipefail
+          sed -i 's/b\.setTextAllCaps(false);/b.setAllCaps(false);/' Echo-Nova/app/src/main/java/fr/echo/nova/android/MainActivity.java
+          grep -F 'b.setAllCaps(false);' Echo-Nova/app/src/main/java/fr/echo/nova/android/MainActivity.java
 
       - name: Test and compile APK
         working-directory: Echo-Nova
