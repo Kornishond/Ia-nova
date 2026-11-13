@@ -36,6 +36,12 @@ jobs:
           set -euo pipefail
           unzip -oq EchoNova030Star16.zip
           chmod +x Echo-Nova/gradlew Echo-Nova/scripts/*.sh
+      - name: Fix Kotlin for Star16
+        shell: bash
+        run: |
+          set -euo pipefail
+          sed -i 's/version "2.2.20"/version "2.4.0"/' Echo-Nova/build.gradle.kts
+          grep -F 'id("org.jetbrains.kotlin.android") version "2.4.0"' Echo-Nova/build.gradle.kts
       - name: Test and compile Star16
         working-directory: Echo-Nova
         shell: bash
